@@ -107,6 +107,52 @@ def decript_matrix_a(input, key):
     for x in matrix:
         output = output + x
     return output
+
+
+def cezar(input, n):
+    output = ''
+    for x in input:
+        s = chr(ord(x) + n)
+        output = output + str(s)
+    return output
+
+
+def decript_cezar(input, n):
+    output = ''
+    for x in input:
+        s = chr(ord(x) - n)
+        output = output + str(s)
+    return output
+
+
+def vigenere(input, key):
+    output = ''
+    for input_char, key_char in zip(input, key):
+        x = ord(input_char) + ord(key_char)
+        if x > 155:
+            x = x - 26
+        output = output + str(chr(x - 65))
+    return output
+
+
+def decript_vigenere(input, key):
+    output = ''
+    matrix = []
+    tmp = ''
+    for x in range(65, 91):
+        tmp = ''
+        for y in range(65, 91):
+            if (x + y) > 155:
+                tmp = tmp + chr(x + y - 26 - 65)
+            else:
+                tmp = tmp + chr(x + y - 65)
+        matrix.append(tmp)
+    for input_char, key_char in zip(input, key):
+        x = ord(key_char) - 65
+        tmp_string = matrix[x]
+        output = output + str(chr(tmp_string.index(input_char) + 65))
+    return output
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     print_hi('PyCharm')
