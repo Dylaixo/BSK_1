@@ -248,6 +248,19 @@ def tests(text):
     assert text == decript_vigenere(crypted, 'ACBDACBDACBDACBDACBDACBDACBDACBDACBDACBDACBDACBD')
 
 
+def decrypt_file(filename, key_stream):
+    output_filename = filename + '.dec'
+    with open(filename, 'rb') as file:
+        data = file.read()
+        decrypted_data = bytearray()
+        for i in range(len(data)):
+            decrypted_byte = data[i] ^ key_stream[i]
+            decrypted_data.append(decrypted_byte)
+    with open(output_filename, 'wb') as file:
+        file.write(decrypted_data)
+    print(f'Plik {filename} został odszyfrowany i zapisany jako {output_filename}.')
+
+
 if __name__ == '__main__':
     tests('CRYPTOGRAPHYCRYPTOGRAPHYCRYPTOGRAPHYCRYPTOGRAPHY')
     end = True
