@@ -1,4 +1,6 @@
 import string
+import threading
+import time
 
 
 def rail_fence(input, n):
@@ -247,6 +249,16 @@ def tests(text):
     crypted = vigenere(text, 'ACBDACBDACBDACBDACBDACBDACBDACBDACBDACBDACBDACBD')
     assert text == decript_vigenere(crypted, 'ACBDACBDACBDACBDACBDACBDACBDACBDACBDACBDACBDACBD')
 
+def generate_lfsr(seed, polynomial):
+    register = [int(bit) for bit in seed]
+    while True:
+        feedback = 0
+        for i in range(len(polynomial)):
+            feedback ^= int(polynomial[i]) & register[i]
+        register.pop()
+        register.insert(0, feedback)
+        yield feedback
+
 def encrypt_file(filename, key):
     output_filename = filename + '.enc'
     with open(filename, 'rb') as file:
@@ -275,7 +287,11 @@ def decrypt_file(filename, key_stream):
     with open(output_filename, 'wb') as file:
         file.write(decrypted_data)
     print(f'Plik {filename} został odszyfrowany i zapisany jako {output_filename}.')
-
+while_true = True
+def key_entered():
+    global while_true
+    input()
+    while_true = False
 
 if __name__ == '__main__':
     tests('CRYPTOGRAPHYCRYPTOGRAPHYCRYPTOGRAPHYCRYPTOGRAPHY')
@@ -288,7 +304,10 @@ if __name__ == '__main__':
         4.Matrix_C
         5.Cezar
         6.Vigenere
-        7.Exit
+        7.Generator
+        8.Encrypt File
+        9.Decrypt File
+        10.Exit
         """)
         x = input()
         if int(x) == 1:
@@ -367,5 +386,27 @@ if __name__ == '__main__':
             elif x == '2':
                 print(decript_vigenere(text, key))
         elif int(x) == 7:
+
+            seed = "10101"
+            polynomial = "10011"
+            lfsr_generator = generate_lfsr(seed, polynomial)
+            threading.Thread(target=key_entered, args=(), name="key_entered", daemon=True).start()
+            while while_true:
+                time.sleep(0.1)
+                bit = next(lfsr_generator)
+                print("Wygenerowany bit:", bit)
+        elif int(x) == 8:
+            seed = "10101"
+            polynomial = "10011"
+            filename = input('Podaj nazwę pliku do zaszyfrowania: ')
+            key = generate_lfsr(seed, polynomial)
+            key_stream = encrypt_file(filename, key)
+        elif int(x) == 9:
+            seed = "10101"
+            polynomial = "10011"
+            filename = input('Podaj nazwę pliku do odszyfrowania: ')
+            key = generate_lfsr(seed, polynomial)
+            decrypt_file(filename, key_stream)
+        elif int(x) == 10:
             end = False
 

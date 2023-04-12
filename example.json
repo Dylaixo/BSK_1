@@ -1,0 +1,18 @@
+{
+	"uczniowie": {
+		"uczen": [
+			{
+				"_imie": "Maciek",
+				"_srednia": "4.48"
+			},
+			{
+				"_imie": "Edyta",
+				"_srednia": "4.55"
+			},
+			{
+				"_imie": "Jacek",
+				"_srednia": "3.72"
+			}
+		]
+	}
+}
