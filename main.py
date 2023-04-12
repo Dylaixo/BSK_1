@@ -247,6 +247,22 @@ def tests(text):
     crypted = vigenere(text, 'ACBDACBDACBDACBDACBDACBDACBDACBDACBDACBDACBDACBD')
     assert text == decript_vigenere(crypted, 'ACBDACBDACBDACBDACBDACBDACBDACBDACBDACBDACBDACBD')
 
+def encrypt_file(filename, key):
+    output_filename = filename + '.enc'
+    with open(filename, 'rb') as file:
+        data = file.read()
+        key_stream = bytearray()
+        for i in range(len(data)):
+            key_bit = next(key)
+            key_stream.append(key_bit)
+        encrypted_data = bytearray()
+        for i in range(len(data)):
+            encrypted_byte = data[i] ^ key_stream[i]
+            encrypted_data.append(encrypted_byte)
+    with open(output_filename, 'wb') as file:
+        file.write(encrypted_data)
+    print(f'Plik {filename} został zaszyfrowany i zapisany jako {output_filename}.')
+    return key_stream
 
 def decrypt_file(filename, key_stream):
     output_filename = filename + '.dec'
